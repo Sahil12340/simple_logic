@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "796771941002",
+    "project_id": "simple-logic-05",
+    "storage_bucket": "simple-logic-05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796771941002:android:6d64188f3d0bc18dffcb73",
+        "android_client_info": {
+          "package_name": "com.example.simple_logic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796771941002-s1ak40fj4m7sf3llrs2496pqmjl0979n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.simple_logic",
+            "certificate_hash": "672f1ee88995ed02dbd630d446b65024495e0d64"
+          }
+        },
+        {
+          "client_id": "796771941002-63qir79t2mmje70bbrdiibqn58bgm5e8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyef1ttQlDyF7co0iarSKmzG7hwyF8N10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796771941002-63qir79t2mmje70bbrdiibqn58bgm5e8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
