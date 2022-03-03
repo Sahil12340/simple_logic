@@ -42,9 +42,12 @@ class ChatBL {
         .snapshots()
         .map((QuerySnapshot query) {
       for (var chat in query.docs) {
-        final chatModel =
-            ChatModel.fromDocumentSnapshot(documentSnapshot: chat);
-        chats.add(chatModel);
+        if (chat.get("receiverId").toString() == StringConstant.userId ||
+            chat.get("senderId").toString() == StringConstant.userId) {
+          final chatModel =
+          ChatModel.fromDocumentSnapshot(documentSnapshot: chat);
+          chats.add(chatModel);
+        }
       }
       return chats;
     });
@@ -52,28 +55,19 @@ class ChatBL {
 
   static Stream<List<ChatModel>> chatDetailStream(String receiverId) {
     List<ChatModel> chats = [];
-    FirebaseFirestore.instance
-        .collection('chats')
-        .where("senderId", isEqualTo: StringConstant.userId)
-        .where("receiverId", isEqualTo:receiverId)
-        .snapshots()
-        .map((QuerySnapshot query) {
-      for (var chat in query.docs) {
-        final chatModel =
-            ChatModel.fromDocumentSnapshot(documentSnapshot: chat);
-        chats.add(chatModel);
-      }
-    });
     return FirebaseFirestore.instance
         .collection('chats')
-        .where("receiverId", isEqualTo: StringConstant.userId)
-        .where("senderId", isEqualTo: receiverId)
         .snapshots()
         .map((QuerySnapshot query) {
       for (var chat in query.docs) {
-        final chatModel =
-            ChatModel.fromDocumentSnapshot(documentSnapshot: chat);
-        chats.add(chatModel);
+        if (chat.get("receiverId").toString() == StringConstant.userId ||
+            chat.get("receiverId").toString() == receiverId ||
+            chat.get("senderId").toString() == StringConstant.userId ||
+            chat.get("senderId").toString() == receiverId) {
+          final chatModel =
+              ChatModel.fromDocumentSnapshot(documentSnapshot: chat);
+          chats.add(chatModel);
+        }
       }
       return chats;
     });

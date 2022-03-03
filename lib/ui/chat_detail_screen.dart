@@ -31,7 +31,9 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
   var name = "";
 
   ChatDetailScreenState(this.receiverId, this.name);
+
   ChatController chatController = Get.put(ChatController());
+
   @override
   void initState() {
     // TODO: implement initState
@@ -169,7 +171,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
   Widget receiveMsg(String msg) {
     return Container(
       padding: const EdgeInsets.all(Dimens.dimenTen),
-      margin: EdgeInsets.only(left: _mediaQuery.size.width * 0.2),
+      margin: EdgeInsets.only(left: _mediaQuery.size.width * 0.2,bottom: Dimens.dimenTen),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         color: Color(0XFF313d5f),
@@ -187,7 +189,8 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
   Widget sendMsg(String msg) {
     return Container(
       padding: const EdgeInsets.all(Dimens.dimenTen),
-      margin: EdgeInsets.only(right: _mediaQuery.size.width * 0.08),
+      margin: EdgeInsets.only(
+          right: _mediaQuery.size.width * 0.08, bottom: Dimens.dimenTen),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         color: const Color(0XFF4acfee),
@@ -267,6 +270,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
                                   false,
                                   DateTime.now());
                               ChatBL().addChat(chat);
+                              etMsg.text = "";
                             },
                           ),
                         )
@@ -318,10 +322,13 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
             alignment: Alignment.centerRight,
             child: sendMsg(chatModel[position].msg));
       } else {
-        return Column(children: [
-          receiveMsgHeader(),
-          receiveMsg(chatModel[position].msg)
-        ]);
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              receiveMsgHeader(),
+              receiveMsg(chatModel[position].msg)
+            ]);
       }
     } else {
       if (chatModel[position].senderId == StringConstant.userId) {
@@ -333,10 +340,13 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
             chatModel[position - 1].receiverId) {
           return receiveMsg(chatModel[position].msg);
         } else {
-          return Column(children: [
-            receiveMsgHeader(),
-            receiveMsg(chatModel[position].msg)
-          ]);
+          return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                receiveMsgHeader(),
+                receiveMsg(chatModel[position].msg)
+              ]);
         }
       }
     }
