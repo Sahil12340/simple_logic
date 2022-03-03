@@ -4,19 +4,22 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_logic/bussiness_logic/chat_bl.dart';
 import 'package:simple_logic/models/chat.dart';
+import 'package:simple_logic/utils/constants/strings.dart';
 import 'package:simple_logic/utils/shared_prefrence_helper.dart';
 
+import '../controllers/chat_controller.dart';
 import '../utils/constants/colors.dart';
 import '../utils/constants/dimens.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   var receiverId = "";
+  var name = "";
 
-  ChatDetailScreen(this.receiverId, {Key? key}) : super(key: key);
+  ChatDetailScreen(this.receiverId, this.name, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return ChatDetailScreenState(receiverId);
+    return ChatDetailScreenState(receiverId, name);
   }
 }
 
@@ -25,8 +28,16 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
   final TextEditingController etMsg = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var receiverId = "";
+  var name = "";
 
-  ChatDetailScreenState(this.receiverId);
+  ChatDetailScreenState(this.receiverId, this.name);
+  ChatController chatController = Get.put(ChatController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ChatController.getChatDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +53,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
             alignment: Alignment.topCenter,
             child: header(),
           ),
-          receiveMsgHeader(),
-          receiveMsg(),
-          Align(alignment: Alignment.centerRight, child: sendMsg()),
+          listForChat(),
           const Spacer(),
           msgBox()
         ],
@@ -90,7 +99,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Albert Flores",
+                name,
                 style: GoogleFonts.poppins(
                     fontSize: _mediaQuery.size.width * 0.04,
                     color: Colors.white70,
@@ -146,7 +155,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
                 ),
               )),
           Text(
-            "Albert Flores",
+            name,
             style: GoogleFonts.poppins(
                 fontSize: _mediaQuery.size.width * 0.04,
                 color: Colors.white70,
@@ -157,7 +166,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 
-  Widget receiveMsg() {
+  Widget receiveMsg(String msg) {
     return Container(
       padding: const EdgeInsets.all(Dimens.dimenTen),
       margin: EdgeInsets.only(left: _mediaQuery.size.width * 0.2),
@@ -166,7 +175,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
         color: Color(0XFF313d5f),
       ),
       child: Text(
-        "Albert Flores",
+        msg,
         style: GoogleFonts.poppins(
             fontSize: _mediaQuery.size.width * 0.03,
             color: Colors.white70,
@@ -175,7 +184,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 
-  Widget sendMsg() {
+  Widget sendMsg(String msg) {
     return Container(
       padding: const EdgeInsets.all(Dimens.dimenTen),
       margin: EdgeInsets.only(right: _mediaQuery.size.width * 0.08),
@@ -184,7 +193,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
         color: const Color(0XFF4acfee),
       ),
       child: Text(
-        "Albert Flores",
+        msg,
         style: GoogleFonts.poppins(
             fontSize: _mediaQuery.size.width * 0.03,
             color: Colors.white70,
@@ -249,7 +258,7 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
                               Icons.send,
                               color: Colors.white,
                             ),
-                            onTap: () async{
+                            onTap: () async {
                               ChatModel chat = ChatModel(
                                   await SPHelper().getUid(),
                                   receiverId,
@@ -291,5 +300,45 @@ class ChatDetailScreenState extends State<ChatDetailScreen> {
                 ),
               ),
             )));
+  }
+
+  Widget listForChat() {
+    return Obx(() => Expanded(
+        child: ListView.builder(
+            itemCount: ChatController.chatDetail.length,
+            itemBuilder: (context, i) {
+              return decisionWidget(ChatController.chatDetail, i);
+            })));
+  }
+
+  Widget decisionWidget(List<ChatModel> chatModel, int position) {
+    if (position == 0) {
+      if (chatModel[position].senderId == StringConstant.userId) {
+        return Align(
+            alignment: Alignment.centerRight,
+            child: sendMsg(chatModel[position].msg));
+      } else {
+        return Column(children: [
+          receiveMsgHeader(),
+          receiveMsg(chatModel[position].msg)
+        ]);
+      }
+    } else {
+      if (chatModel[position].senderId == StringConstant.userId) {
+        return Align(
+            alignment: Alignment.centerRight,
+            child: sendMsg(chatModel[position].msg));
+      } else {
+        if (chatModel[position].receiverId ==
+            chatModel[position - 1].receiverId) {
+          return receiveMsg(chatModel[position].msg);
+        } else {
+          return Column(children: [
+            receiveMsgHeader(),
+            receiveMsg(chatModel[position].msg)
+          ]);
+        }
+      }
+    }
   }
 }

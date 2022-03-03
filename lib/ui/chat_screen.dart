@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_logic/controllers/chat_controller.dart';
+import 'package:simple_logic/models/chat.dart';
 import 'package:simple_logic/models/user.dart';
 import 'package:simple_logic/utils/constants/colors.dart';
 import 'package:simple_logic/utils/constants/strings.dart';
@@ -138,7 +139,7 @@ class ChatScreenState extends State<ChatScreen> {
             )));
   }
 
-  Widget chatCard(UserModel userModel) {
+  Widget chatCard(UserModel userModel, ChatModel chatModel) {
     return GestureDetector(
       child: Container(
         margin: const EdgeInsets.only(
@@ -171,7 +172,7 @@ class ChatScreenState extends State<ChatScreen> {
                       fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "Please Help Me...",
+                  chatModel.msg,
                   style: GoogleFonts.poppins(
                       fontSize: _mediaQuery.size.width * 0.03,
                       color: Colors.white30,
@@ -195,7 +196,14 @@ class ChatScreenState extends State<ChatScreen> {
         ),
       ),
       onTap: () {
-        Get.toNamed(StringConstant.chatDetailScreen,arguments: "2HkoGkY6q8bSh9WcqBNE");
+        StringConstant.receiverID = userModel.id.toString();
+        Get.toNamed(
+          StringConstant.chatDetailScreen,
+          arguments: [
+            userModel.id,
+            userModel.name
+          ],
+        );
       },
     );
   }
@@ -208,7 +216,8 @@ class ChatScreenState extends State<ChatScreen> {
               child: ListView.builder(
                   itemCount: chatController.user.length,
                   itemBuilder: (context, i) {
-                    return chatCard(chatController.user[i]);
+                    return chatCard(
+                        chatController.user[i], chatController.chat[i]);
                   }));
         });
   }

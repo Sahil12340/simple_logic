@@ -9,6 +9,7 @@ import 'package:simple_logic/ui/sign_up_screen.dart';
 import 'constants/strings.dart';
 
 class RouterForScreen {
+  static dynamic argumentData = Get.arguments;
   static final routes = [
     GetPage(name: StringConstant.loginScreen, page: () => const LoginScreen()),
     GetPage(
@@ -16,6 +17,7 @@ class RouterForScreen {
     GetPage(name: StringConstant.chatScreen, page: () => const ChatScreen()),
     GetPage(
         name: StringConstant.chatDetailScreen,
-        page: () => ChatDetailScreen(Get.arguments))
+        page: () =>
+            ChatDetailScreen(argumentData[0], argumentData[1]))
   ];
 }

@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../models/user.dart';
+import '../utils/constants/strings.dart';
 import '../utils/shared_prefrence_helper.dart';
 
 class UserBL {
@@ -61,9 +64,7 @@ class UserBL {
 
   static Future<bool> loginUserWithEmail(String email) async {
     bool isUserExist = false;
-    var doc = await collection
-        .where("emailId", isEqualTo: email)
-        .get();
+    var doc = await collection.where("emailId", isEqualTo: email).get();
     if (doc.size != 0) {
       for (var doc in doc.docs) {
         SPHelper().addUid(doc.reference.id);
@@ -74,5 +75,14 @@ class UserBL {
       isUserExist = false;
     }
     return isUserExist;
+  }
+
+  void checkIfLoggedIn() async {
+    var ifLoggedIn = await SPHelper().getIsLoggedIn();
+    var userId = await SPHelper().getUid();
+    if (ifLoggedIn) {
+      StringConstant.userId = userId;
+      Get.offAllNamed(StringConstant.chatScreen);
+    }
   }
 }

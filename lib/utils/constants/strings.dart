@@ -12,4 +12,8 @@ class StringConstant {
   //SHARED PREFERENCE
   static const isLoggedIn = 'isLoggedIn';
   static const UID = 'uid';
+
+  //GLOBAL VALUES
+  static var userId = "";
+  static var receiverID = "";
 }

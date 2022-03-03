@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:simple_logic/bussiness_logic/user_bl.dart';
 import 'package:simple_logic/utils/constants/strings.dart';
 
 import '../controllers/user_controller.dart';
@@ -27,6 +28,13 @@ class LoginScreenState extends State<LoginScreen> {
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final UserController userController = Get.put(UserController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    UserBL().checkIfLoggedIn();
+  }
 
   @override
   Widget build(BuildContext context) {
